@@ -16,6 +16,7 @@ MonoBehaviour:
   - pbEnableBackfaceSelection
   - pbIconGUI
   - pb_SmoothingGroupEditor::m_DrawNormals
+  - pbShowDetail
   m_Int_keys:
   - pbDefaultEditLevel
   - pbDefaultSelectionMode
@@ -29,8 +30,8 @@ MonoBehaviour:
   - pbCurrentMaterialPalette
   m_Color_keys: []
   m_Material_keys: []
-  m_Bool_values: 00010000
-  m_Int_values: 01000000010000000000000001000000
+  m_Bool_values: 0001000001
+  m_Int_values: 00000000020000000000000001000000
   m_Float_values:
   - 0
   - 0

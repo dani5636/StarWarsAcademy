@@ -19,10 +19,10 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4646394110064020}
-  - component: {fileID: 33678398947046942}
-  - component: {fileID: 65338583490035732}
   - component: {fileID: 23121840812334626}
+  - component: {fileID: 33678398947046942}
   - component: {fileID: 114748970229304664}
+  - component: {fileID: 65338583490035732}
   - component: {fileID: 54483279528439434}
   m_Layer: 0
   m_Name: TestNote

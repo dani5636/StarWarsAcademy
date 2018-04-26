@@ -34,26 +34,30 @@ public class CuttingBlade : MonoBehaviour {
     void OnTriggerExit(Collider other) {
         if (other.tag.Equals("Node") && isCutting)
         {
-
-            other.gameObject.GetComponent<MoveNode>().OnHit();
-            GameObject victim = other.gameObject;
-            Vector3 cuttingDirection = startCuttingPosition - transform.position;
-            cuttingDirection = cuttingDirection.normalized;
-            GameObject[] pieces = MeshCut.Cut(victim, startCuttingPosition, transform.right, capMaterial);
-        
-            if (!pieces[1].GetComponent<Rigidbody>())
-                pieces[1].AddComponent<Rigidbody>();
-
-            pieces[0].GetComponent<Rigidbody>().isKinematic = false;
-
-            other.gameObject.GetComponent<MoveNode>().speed = 0;
-            pieces[0].GetComponent<Rigidbody>().AddForce((Vector3.forward + Vector3.left )*forceMultiplier);
-
-
-
+            StartCoroutine("Cut", other.gameObject);
         }
     }
+    private IEnumerator Cut(GameObject node) {
+        Vector3 cuttingDirection = startCuttingPosition - transform.position;
+        cuttingDirection = cuttingDirection.normalized;
+        node.GetComponent<MoveNode>().OnHit(cuttingDirection);
+        node.GetComponent<MoveNode>().speed = 0;
+        GameObject[] pieces = MeshCut.Cut(node, startCuttingPosition, transform.right, capMaterial);
 
+        if (!pieces[1].GetComponent<Rigidbody>())
+            pieces[1].AddComponent<Rigidbody>();
+
+        pieces[0].GetComponent<Rigidbody>().isKinematic = false;
+
+        pieces[0].GetComponent<Rigidbody>().AddForce((cuttingDirection + (Vector3.left / 2) + Vector3.forward) * forceMultiplier);
+        pieces[1].GetComponent<Rigidbody>().AddForce((cuttingDirection + (Vector3.right / 2) + Vector3.forward) * forceMultiplier);
+
+        foreach (GameObject piece in pieces)
+        {
+            Destroy(piece, 2.0f);
+        }
+        yield return null;
+    }
     public void setActive(bool active)
     {
         isActive = active;
