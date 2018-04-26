@@ -27,6 +27,7 @@ public class Lightsaber : MonoBehaviour {
     [Tooltip("The blade and light color. Alpha should be set, the higher alpha is, the bigger the glow effect. If alpha is 0, then there's no glow effect.")]
     public Color bladeColor;
 
+    public bool keepActive = false;
     public AudioClip soundOn;
     public AudioClip soundOff;
     public AudioClip soundLoop;
@@ -231,8 +232,16 @@ public class Lightsaber : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        
+
         // key pressed
+	    if (keepActive)
+	    {
+	        if (!saberActive)
+	        {
+	            LightsaberOn();
+	            isDeactivating = true;
+	        }
+	    }
 	    if (Input.GetButton("InitializeLightsaber"))
 	    {
             // Debug.Log("Space was pressed");
