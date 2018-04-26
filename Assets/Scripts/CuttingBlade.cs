@@ -47,7 +47,7 @@ public class CuttingBlade : MonoBehaviour {
             pieces[0].GetComponent<Rigidbody>().isKinematic = false;
 
             other.gameObject.GetComponent<MoveNode>().speed = 0;
-            pieces[0].GetComponent<Rigidbody>().AddForce((Vector3.forward + Vector3.left)*forceMultiplier);
+            pieces[0].GetComponent<Rigidbody>().AddForce((Vector3.forward + Vector3.left )*forceMultiplier);
 
 
 

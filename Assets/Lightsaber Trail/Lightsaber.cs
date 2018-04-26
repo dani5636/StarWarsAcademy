@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using NUnit.Framework.Constraints;
 
 /**
  * Lightsaber activate / deactivate script.
@@ -26,6 +27,7 @@ public class Lightsaber : MonoBehaviour {
     [Tooltip("The blade and light color. Alpha should be set, the higher alpha is, the bigger the glow effect. If alpha is 0, then there's no glow effect.")]
     public Color bladeColor;
 
+    public bool keepActive = false;
     public AudioClip soundOn;
     public AudioClip soundOff;
     public AudioClip soundLoop;
@@ -34,7 +36,8 @@ public class Lightsaber : MonoBehaviour {
     public AudioSource AudioSource;
     public AudioSource AudioSourceLoop;
     public AudioSource AudioSourceSwing;
-    
+
+    private bool isDeactivating = false;
 
     // swinging
     // TODO: make it depend on velocity of VR controller
@@ -69,14 +72,13 @@ public class Lightsaber : MonoBehaviour {
 
         private float localScaleX;
         private float localScaleZ;
-
         public Blade( GameObject gameObject, float extendSpeed, bool active)
         {
-
+            
             this.gameObject = gameObject;
             this.light = gameObject.GetComponentInChildren<Light>();
             this.active = active;
-
+                 
             // consistency check
             if (light == null)
             {
@@ -230,17 +232,36 @@ public class Lightsaber : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        
-        // key pressed
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            // Debug.Log("Space was pressed");
 
-            ToggleLightsaberOnOff();
+        // key pressed
+	    if (keepActive)
+	    {
+	        if (!saberActive)
+	        {
+	            LightsaberOn();
+	            isDeactivating = true;
+	        }
+	    }
+	    if (Input.GetButton("InitializeLightsaber"))
+	    {
+            // Debug.Log("Space was pressed");
+            if (!saberActive) { 
+	        LightsaberOn();
+                isDeactivating = false;
+
+            }
+
 
         }
+	    else
+	    {
+            if (!isDeactivating) { 
+            LightsaberOff();
+	        isDeactivating = true;
+            }
+        }
 
-        UpdateBlades();
+	    UpdateBlades();
 
 
         // light and blade color
@@ -269,7 +290,7 @@ public class Lightsaber : MonoBehaviour {
             // Debug.Log("Swing speed: " + swingSpeed);
 
             // if certain swing speed is reached, play swing audio sound. if swinging stopped, fade the volume out
-            if (swingSpeed > 0.8) // TODO: just random swing values; needs to me more generic
+            if (swingSpeed > 0.5) // TODO: just random swing values; needs to me more generic
             {
                 if (!AudioSourceSwing.isPlaying)
                 {
@@ -295,18 +316,7 @@ public class Lightsaber : MonoBehaviour {
         }
     }
 
-    private void ToggleLightsaberOnOff()
-    {
-        if (saberActive)
-        {
-            LightsaberOff();
-        }
-        else
-        {
-            LightsaberOn();
-        }
 
-    }
 
     private void LightsaberOn()
     {
