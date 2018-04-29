@@ -37,10 +37,14 @@ public class MoveNode : MonoBehaviour
         }
     }
 
-    public void OnHit(Vector3 directionOfTravel)
+    public void OnHit(bool correctSlice)
     {
-        if(isDebugging)
-        _manager.NodeHit();
-
+        if (correctSlice)
+        {
+            _manager.NodeHit();
+        }
+        else {
+            _manager.NodeMiss();
+        }
     }
 }

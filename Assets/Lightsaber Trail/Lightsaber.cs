@@ -159,12 +159,12 @@ public class Lightsaber : MonoBehaviour {
             if (active && !gameObject.activeSelf)
             {
                 gameObject.SetActive(true);
-                gameObject.GetComponent<CuttingBlade>().setActive(active);
+                gameObject.GetComponent<CuttingBlade>().SetActive(active);
             }
             else if(!active && gameObject.activeSelf)
             {
                 gameObject.SetActive(false);
-                gameObject.GetComponent<CuttingBlade>().setActive(active);
+                gameObject.GetComponent<CuttingBlade>().SetActive(active);
             }
             
         }
