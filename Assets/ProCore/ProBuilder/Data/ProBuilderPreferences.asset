@@ -14,6 +14,7 @@ MonoBehaviour:
   m_Bool_keys:
   - pb_SmoothingGroupEditor::m_ShowPreview
   - pbEnableBackfaceSelection
+
   - pbIconGUI
   - pb_SmoothingGroupEditor::m_DrawNormals
   - pbShowDetail
@@ -30,6 +31,7 @@ MonoBehaviour:
   - pbCurrentMaterialPalette
   m_Color_keys: []
   m_Material_keys: []
+
   m_Bool_values: 0001000001
   m_Int_values: 00000000020000000000000001000000
   m_Float_values:
