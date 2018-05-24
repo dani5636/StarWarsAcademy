@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections.Generic;
-using NUnit.Framework.Constraints;
 
 /**
  * Lightsaber activate / deactivate script.
@@ -159,12 +158,12 @@ public class Lightsaber : MonoBehaviour {
             if (active && !gameObject.activeSelf)
             {
                 gameObject.SetActive(true);
-                gameObject.GetComponent<CuttingBlade>().setActive(active);
+                gameObject.GetComponent<CuttingBlade>().SetActive(active);
             }
             else if(!active && gameObject.activeSelf)
             {
                 gameObject.SetActive(false);
-                gameObject.GetComponent<CuttingBlade>().setActive(active);
+                gameObject.GetComponent<CuttingBlade>().SetActive(active);
             }
             
         }
@@ -242,25 +241,7 @@ public class Lightsaber : MonoBehaviour {
 	            isDeactivating = true;
 	        }
 	    }
-	    if (Input.GetButton("InitializeLightsaber"))
-	    {
-            // Debug.Log("Space was pressed");
-            if (!saberActive) { 
-	        LightsaberOn();
-                isDeactivating = false;
-
-            }
-
-
-        }
-	    else
-	    {
-            if (!isDeactivating) { 
-            LightsaberOff();
-	        isDeactivating = true;
-            }
-        }
-
+	   
 	    UpdateBlades();
 
 
@@ -271,6 +252,29 @@ public class Lightsaber : MonoBehaviour {
         // swing speed
         updateSwingHandler();
 
+
+    }
+    public void ToogleOnOffLightsaber(bool on) {
+        if (on)
+        {
+            // Debug.Log("Space was pressed");
+            if (!saberActive)
+            {
+                LightsaberOn();
+                isDeactivating = false;
+
+            }
+
+
+        }
+        else
+        {
+            if (!isDeactivating)
+            {
+                LightsaberOff();
+                isDeactivating = true;
+            }
+        }
 
     }
 
