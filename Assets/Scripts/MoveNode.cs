@@ -7,9 +7,12 @@ public class MoveNode : MonoBehaviour
     //Test travelTime
     [SerializeField]
     public float speed = -4.0f;
-    // Use this for initialization
+    public bool isDebugging = false;
+
     private float travelledTime;
+    [HideInInspector]
     public NodeManager _manager;
+    [HideInInspector]
     public bool hitable;
 
     void Start()
@@ -29,13 +32,19 @@ public class MoveNode : MonoBehaviour
         {
             hitable = true;
         }
-        if (other.tag == "EndWall") {
+        if (other.tag == "KillNodes") {
             Destroy(gameObject);
         }
     }
 
-    public void OnHit()
+    public void OnHit(bool correctSlice)
     {
-        _manager.NodeHit();
+        if (correctSlice)
+        {
+            _manager.NodeHit();
+        }
+        else {
+            _manager.NodeMiss();
+        }
     }
 }
