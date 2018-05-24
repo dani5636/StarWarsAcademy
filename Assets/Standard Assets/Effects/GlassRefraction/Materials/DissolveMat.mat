@@ -67,8 +67,8 @@ Material:
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
-    - _DissolveSize: 24.28
-    - _DissolveY: -41.626175
+    - _DissolveSize: 24
+    - _DissolveY: 30
     - _DstBlend: 0
     - _Edges: 0
     - _GlossMapScale: 1
@@ -82,7 +82,7 @@ Material:
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _StartingY: 20
+    - _StartingY: -25
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:

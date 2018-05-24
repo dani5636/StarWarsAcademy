@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DissolveTriggerEffect : MonoBehaviour {
+public class DissolveTriggerEffect : MonoBehaviour
+{
 
     public Material dissolveMaterial;
     public float speed, max;
@@ -20,7 +21,7 @@ public class DissolveTriggerEffect : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.E))
         {
             TriggerEffect();
-        } 
+        }
 
         if (Input.GetKeyDown(KeyCode.R))
         {
