@@ -34,6 +34,9 @@ public class CuttingBlade : MonoBehaviour {
             else if(other.GetType() !=typeof(BoxCollider) && !isCutting){
                 correctSlice = false;
             }
+            if (other.GetType() == typeof(BoxCollider)) {
+
+            }
             startCuttingPosition = transform.position;
             isCutting = true;
 
@@ -43,20 +46,21 @@ public class CuttingBlade : MonoBehaviour {
         if (other.tag.Equals("Node") && isCutting && other.GetType() != typeof(BoxCollider))
         {
 
-            StartCoroutine("Cut", other.gameObject);
+            rotateBlade(startCuttingPosition);
+
             other.gameObject.GetComponent<MoveNode>().OnHit(correctSlice);
-            other.gameObject.GetComponent<BoxCollider>().enabled = false;
-            other.gameObject.GetComponent<MeshCollider>().enabled = false;
+            StartCoroutine("Cut", other.gameObject);
             isCutting = false;
             correctSlice = false;
         }
     }
     private IEnumerator Cut(GameObject node) {
-        Vector3 cuttingDirection = startCuttingPosition - transform.position;
+
+        Vector3 cuttingDirection = startCuttingPosition - transform.position ;
         cuttingDirection = cuttingDirection.normalized;
         node.GetComponent<MoveNode>().speed = 0;
         GameObject[] pieces = MeshCut.Cut(node, startCuttingPosition, transform.right, capMaterial);
-
+      
         if (!pieces[1].GetComponent<Rigidbody>())
             pieces[1].AddComponent<Rigidbody>();
 
@@ -65,6 +69,8 @@ public class CuttingBlade : MonoBehaviour {
         pieces[0].GetComponent<Rigidbody>().AddForce((((Vector3.left / 2) + Vector3.forward) - cuttingDirection) * forceMultiplier);
         pieces[1].GetComponent<Rigidbody>().AddForce((((Vector3.right / 2) + Vector3.forward) - cuttingDirection) * forceMultiplier);
 
+        pieces[0].gameObject.GetComponent<BoxCollider>().enabled = false;
+        pieces[0].gameObject.GetComponent<MeshCollider>().enabled = false;
         foreach (GameObject piece in pieces)
         {
             Destroy(piece, 2.0f);
@@ -75,6 +81,14 @@ public class CuttingBlade : MonoBehaviour {
     {
         isActive = active;
     }
-
+    private void rotateBlade(Vector3 startDirection) {
+        Vector3 pos = transform.position;
+            Vector3 dir = startDirection - pos;
+            Quaternion rotation = Quaternion.LookRotation(dir);
+            rotation.x = 0;
+            rotation.z = 0;
+            transform.localRotation = rotation;
+        
+    }
 
 }
