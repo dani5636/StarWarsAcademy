@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraScript : MonoBehaviour
+public class MouseMovement : MonoBehaviour
 {
 
     public float speedH = 2.0f;
@@ -12,13 +12,7 @@ public class CameraScript : MonoBehaviour
     private float pitch = 0.0f;
 
 
-
-    // Use this for initialization
-    void Start()
-    {
-
-    }
-
+    
     // Update is called once per frame
     void Update()
     {
