@@ -12,6 +12,7 @@ public class SphereDissolve : MonoBehaviour {
     public float currentY;
     private void Start(){
         dissolveSphereMaterial.SetFloat("_DissolveY", currentY);
+        dissolveArchMaterial.SetFloat("_DissolveY", currentY);
     }
     private void Update()
     {
@@ -19,13 +20,13 @@ public class SphereDissolve : MonoBehaviour {
             if (dissolving && currentY > min)
             {
                 dissolveSphereMaterial.SetFloat("_DissolveY", currentY);
-                dissolveArchMaterial.SetFloat("DissolveY", currentY);
+                dissolveArchMaterial.SetFloat("_DissolveY", currentY);
                 currentY -= Time.deltaTime * speed;
             }
             else if (!dissolving && currentY < max)
             {
                 dissolveSphereMaterial.SetFloat("_DissolveY", currentY);
-                dissolveArchMaterial.SetFloat("DissolveY", currentY);
+                dissolveArchMaterial.SetFloat("_DissolveY", currentY);
                 currentY += Time.deltaTime * speed;
             }
             else {
