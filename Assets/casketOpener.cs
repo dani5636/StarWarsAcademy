@@ -6,12 +6,24 @@ public class casketOpener : MonoBehaviour {
     
     private Vector3 originalScale;
 
+    [SerializeField]
+    private GameObject animholder;
+
+    [SerializeField]
+    private GameObject soundEffect;
+
+    private AudioSource musicSource;
+
     private float limitMinScale = 0.1f;
     bool isScaling = false;
+
+    [SerializeField]
+    private float moveSpeed = 0.3f;
 
 	// Use this for initialization
 	void Start () {
         originalScale = transform.localScale;
+        musicSource = soundEffect.GetComponent<AudioSource>();
 	}
 	
 	// Update is called once per frame
@@ -35,7 +47,14 @@ public class casketOpener : MonoBehaviour {
 
         if (isScaling && transform.localScale.y >= limitMinScale)
         {
+            if (!musicSource.isPlaying)
+            {
+                musicSource.Play();
+            }
             transform.localScale += new Vector3(0, -0.01f, 0);
+        } else if (isScaling)
+        {
+            animholder.transform.Translate(Vector3.down * moveSpeed * Time.deltaTime);
         }
 
 
