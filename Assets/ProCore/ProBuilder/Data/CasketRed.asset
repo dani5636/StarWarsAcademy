@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -770389242, guid: 4df21bd079886d84699ca7be1316c7a7, type: 3}
+  m_Name: CasketRed
+  m_EditorClassIdentifier: 
+  array:
+  - {fileID: 2100000, guid: bd3f404e84bd24ef0b20064e75fe2d19, type: 2}
+  - {fileID: 2100000, guid: 3c5dfc17aba3a428e8337ad74ef634eb, type: 2}
+  - {fileID: 2100000, guid: d8fc286a5e0344f67811c3b5bb5385e4, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
