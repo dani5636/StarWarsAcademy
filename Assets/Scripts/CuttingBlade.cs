@@ -27,47 +27,48 @@ public class CuttingBlade : MonoBehaviour {
         if (other.tag.Equals("Node") && isActive && other.gameObject.GetComponent<MoveNode>().hitable )
         {
 
-            if (other.GetType() == typeof(BoxCollider) && !isCutting)
+            if (other.GetType() == typeof(BoxCollider))
             {
                 correctSlice = true;
-            }
-            else if(other.GetType() !=typeof(BoxCollider) && !isCutting){
+                rotateBlade(other.transform.position);
+                other.gameObject.GetComponent<MoveNode>().OnHit(correctSlice);
+                StartCoroutine("Cut", other.gameObject);
                 correctSlice = false;
             }
-            if (other.GetType() == typeof(BoxCollider)) {
-
+            else if(other.GetType() !=typeof(BoxCollider)){
+                rotateBlade(other.transform.position);
+                other.gameObject.GetComponent<MoveNode>().OnHit(false);
+                StartCoroutine("Cut", other.gameObject);
             }
-            startCuttingPosition = transform.position;
-            isCutting = true;
 
+        }
+        else if(other.tag.Equals("StartGame")){
+            rotateBlade(other.transform.position);
+            other.gameObject.GetComponent<StartCut>().OnHit();
+            StartCoroutine("Cut", other.gameObject);
         }
     }
     void OnTriggerExit(Collider other) {
-        if (other.tag.Equals("Node") && isCutting && other.GetType() != typeof(BoxCollider))
-        {
+       
 
-            rotateBlade(startCuttingPosition);
-
-            other.gameObject.GetComponent<MoveNode>().OnHit(correctSlice);
-            StartCoroutine("Cut", other.gameObject);
-            isCutting = false;
-            correctSlice = false;
-        }
     }
     private IEnumerator Cut(GameObject node) {
 
-        Vector3 cuttingDirection = startCuttingPosition - transform.position ;
-        cuttingDirection = cuttingDirection.normalized;
+
         node.GetComponent<MoveNode>().speed = 0;
-        GameObject[] pieces = MeshCut.Cut(node, startCuttingPosition, transform.right, capMaterial);
+        GameObject[] pieces = MeshCut.Cut(node, transform.position, transform.right, capMaterial);
       
         if (!pieces[1].GetComponent<Rigidbody>())
             pieces[1].AddComponent<Rigidbody>();
 
         pieces[0].GetComponent<Rigidbody>().isKinematic = false;
-       
-        pieces[0].GetComponent<Rigidbody>().AddForce((((Vector3.left / 2) + Vector3.forward) - cuttingDirection) * forceMultiplier);
-        pieces[1].GetComponent<Rigidbody>().AddForce((((Vector3.right / 2) + Vector3.forward) - cuttingDirection) * forceMultiplier);
+        var forceZero = pieces[0].transform.position - transform.position;
+        forceZero = forceZero.normalized;
+        pieces[0].GetComponent<Rigidbody>().AddForce(forceZero * forceMultiplier);
+
+        var forceOne = pieces[1].transform.position - transform.position;
+        forceOne = forceZero.normalized;
+        pieces[1].GetComponent<Rigidbody>().AddForce(forceOne * forceMultiplier);
 
         pieces[0].gameObject.GetComponent<BoxCollider>().enabled = false;
         pieces[0].gameObject.GetComponent<MeshCollider>().enabled = false;

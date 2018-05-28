@@ -36,7 +36,12 @@ public class MoveNode : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
+    void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Trigger") {
+            _manager.NodeMiss();
+        }
+    }
     public void OnHit(bool correctSlice)
     {
         if (correctSlice)

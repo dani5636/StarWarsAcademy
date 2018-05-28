@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class HealthBar : MonoBehaviour {
 
     Image healthBar;
-    private float speed = 0.01f;
+    private float speed = 0.03f;
     private bool running;
  
 
@@ -34,7 +34,7 @@ public class HealthBar : MonoBehaviour {
 
 
     }
-    public void DecreasingHealth()
+    private void DecreasingHealth()
     {
         healthBar.fillAmount -= Time.deltaTime * speed;
     }
@@ -42,6 +42,10 @@ public class HealthBar : MonoBehaviour {
     public void HealthIncrease()
     {
         healthBar.fillAmount += 0.05f;
+    }
+    public void HealthDecrease() {
+
+        healthBar.fillAmount -= 0.05f;
     }
     public void setRunning(bool running) {
         this.running = running;
