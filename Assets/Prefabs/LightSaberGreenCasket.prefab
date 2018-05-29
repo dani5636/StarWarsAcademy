@@ -30,7 +30,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 127
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!1 &1108254368451840
 GameObject:
@@ -50,7 +50,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 127
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!1 &1186883516298512
 GameObject:
@@ -70,7 +70,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!1 &1273725101625184
 GameObject:
@@ -90,7 +90,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!1 &1355305066072590
 GameObject:
@@ -110,7 +110,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 127
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!1 &1523129248506110
 GameObject:
@@ -120,6 +120,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4771499543277098}
+  - component: {fileID: 111041282844102040}
   m_Layer: 0
   m_Name: LightSaberGreenCasket
   m_TagString: Untagged
@@ -145,7 +146,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &4395781046877134
 Transform:
@@ -192,8 +193,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1523129248506110}
-  m_LocalRotation: {x: 0, y: -1, z: 0, w: 0}
-  m_LocalPosition: {x: -3, y: 0, z: -2.4}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -2.8500001, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4689063821379418}
@@ -204,7 +205,7 @@ Transform:
   - {fileID: 4435709422564274}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4774173668521928
 Transform:
   m_ObjectHideFlags: 1
@@ -574,6 +575,21 @@ MeshCollider:
   m_CookingOptions: 14
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 0}
+--- !u!111 &111041282844102040
+Animation:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1523129248506110}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: 8eeea4537d08e4668822602a4f15f500, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: 8eeea4537d08e4668822602a4f15f500, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!114 &114148182721728748
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -14622,6 +14638,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a07bd6a070052435ba08700f7f1c68b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animholder: {fileID: 0}
+  soundEffect: {fileID: 0}
+  moveSpeed: 0.3
 --- !u!114 &114624278095090156
 MonoBehaviour:
   m_ObjectHideFlags: 1
