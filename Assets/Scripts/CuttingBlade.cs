@@ -48,7 +48,13 @@ public class CuttingBlade : MonoBehaviour {
         else if(other.tag.Equals("StartGame")){
             rotateBlade(other.transform.position);
             other.gameObject.GetComponent<Animation>().Stop();
+            if(other.GetComponent<StartCut>() != null) { 
             other.gameObject.GetComponent<StartCut>().OnHit();
+            }
+            if (other.GetComponent<QuitToMenuScript>() != null)
+            {
+                other.gameObject.GetComponent<QuitToMenuScript>().OnHit();
+            }
             StartCoroutine("Cut", other.gameObject);
         }
     }

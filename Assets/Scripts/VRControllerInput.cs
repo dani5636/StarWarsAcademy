@@ -7,6 +7,7 @@ public class VRControllerInput : MonoBehaviour {
     private SteamVR_TrackedObject trackedObj;
     [SerializeField]
     GameObject blade;
+    bool on = false;
     // 2
     void Awake()
     {
@@ -21,15 +22,20 @@ public class VRControllerInput : MonoBehaviour {
         // 2
         if (Controller.GetHairTriggerDown())
         {
+            if (on)
+            {
+                on = false;
+            }
+            else {
+                on = true;
+                    }
             if(blade!=null)
-                blade.GetComponent<Lightsaber>().ToogleOnOffLightsaber(true);
+                blade.GetComponent<Lightsaber>().ToogleOnOffLightsaber(on);
         }
 
         // 3
         if (Controller.GetHairTriggerUp())
         {
-            if (blade != null)
-                blade.GetComponent<Lightsaber>().ToogleOnOffLightsaber(false);
         }
     }
     private SteamVR_Controller.Device Controller

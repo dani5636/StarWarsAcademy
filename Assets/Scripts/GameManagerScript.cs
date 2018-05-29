@@ -19,7 +19,8 @@ public class GameManagerScript : MonoBehaviour {
     private GameObject ResetSongPosition;
     [SerializeField]
     private GameObject QuitToMenuPosition;
-
+    [SerializeField]
+    private GameObject levelChanger;
     [SerializeField]
     private GameObject healthBar;
 
@@ -89,6 +90,7 @@ public class GameManagerScript : MonoBehaviour {
 
         GameObject childQuit = Instantiate(QuitToMenuObject, new Vector3(0, 0, 0), Quaternion.identity);
         childQuit.transform.parent = QuitToMenuPosition.transform;
+        childQuit.GetComponent<QuitToMenuScript>().SetLevelChanger(levelChanger);
 
     }
 }

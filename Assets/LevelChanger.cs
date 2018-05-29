@@ -16,6 +16,8 @@ public class LevelChanger : MonoBehaviour {
     AudioSource audioSource;
     bool isFading;
     float fadePerSec;
+    [SerializeField]
+    private int NextLevel;
 
     private void Start()
     {
@@ -25,32 +27,32 @@ public class LevelChanger : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            FadeToNextLevel();
-            isFading = true;
-            fadePerSec = audioSource.volume / fadeOutTime;
-
-        }
+       
         if(isFading){
                 audioSource.volume = Mathf.MoveTowards(
                     audioSource.volume, 0, fadePerSec * Time.deltaTime);
             
         }
 	}
+    public void ChangeLevel() {
 
-    public void FadeToNextLevel ()
-    {
-        FadeToLevel(SceneManager.GetActiveScene().buildIndex + 1);
+        FadeToNextLevel();
+        isFading = true;
+        fadePerSec = audioSource.volume / fadeOutTime;
     }
 
-    public void FadeToLevel(int levelIndex)
+    private void FadeToNextLevel ()
+    {
+        FadeToLevel(NextLevel);
+    }
+
+    private void FadeToLevel(int levelIndex)
     {
         levelToLoad = levelIndex;
         animator.SetTrigger("FadeOut");
     }
 
-    public void OnFadeComplete ()
+    private void OnFadeComplete ()
     {
         SceneManager.LoadScene(levelToLoad);
 
