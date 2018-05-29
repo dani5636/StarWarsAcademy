@@ -31,11 +31,14 @@ public class CuttingBlade : MonoBehaviour {
             {
                 correctSlice = true;
                 rotateBlade(other.transform.position);
-                other.gameObject.GetComponent<MoveNode>().OnHit(correctSlice);
+                other.GetComponent<MoveNode>().speed = 0;
+                other.gameObject.GetComponent<MoveNode>().OnHit(true);
                 StartCoroutine("Cut", other.gameObject);
-                correctSlice = false;
+
             }
             else if(other.GetType() !=typeof(BoxCollider)){
+
+                other.GetComponent<MoveNode>().speed = 0;
                 rotateBlade(other.transform.position);
                 other.gameObject.GetComponent<MoveNode>().OnHit(false);
                 StartCoroutine("Cut", other.gameObject);
@@ -44,6 +47,7 @@ public class CuttingBlade : MonoBehaviour {
         }
         else if(other.tag.Equals("StartGame")){
             rotateBlade(other.transform.position);
+            other.gameObject.GetComponent<Animation>().Stop();
             other.gameObject.GetComponent<StartCut>().OnHit();
             StartCoroutine("Cut", other.gameObject);
         }
@@ -55,13 +59,25 @@ public class CuttingBlade : MonoBehaviour {
     private IEnumerator Cut(GameObject node) {
 
 
-        node.GetComponent<MoveNode>().speed = 0;
+
         GameObject[] pieces = MeshCut.Cut(node, transform.position, transform.right, capMaterial);
-      
+
         if (!pieces[1].GetComponent<Rigidbody>())
             pieces[1].AddComponent<Rigidbody>();
 
         pieces[0].GetComponent<Rigidbody>().isKinematic = false;
+        
+        if(pieces[0].gameObject.GetComponent<BoxCollider>() != null) { 
+        pieces[0].gameObject.GetComponent<BoxCollider>().enabled = false;
+        }
+        if (pieces[0].gameObject.GetComponent<MeshCollider>() != null)
+        {
+            pieces[0].gameObject.GetComponent<MeshCollider>().enabled = false;
+        }
+        if (pieces[0].gameObject.GetComponent<SphereCollider>() != null)
+        {
+            pieces[0].gameObject.GetComponent<SphereCollider>().enabled = false;
+        }
         var forceZero = pieces[0].transform.position - transform.position;
         forceZero = forceZero.normalized;
         pieces[0].GetComponent<Rigidbody>().AddForce(forceZero * forceMultiplier);
@@ -69,9 +85,6 @@ public class CuttingBlade : MonoBehaviour {
         var forceOne = pieces[1].transform.position - transform.position;
         forceOne = forceZero.normalized;
         pieces[1].GetComponent<Rigidbody>().AddForce(forceOne * forceMultiplier);
-
-        pieces[0].gameObject.GetComponent<BoxCollider>().enabled = false;
-        pieces[0].gameObject.GetComponent<MeshCollider>().enabled = false;
         foreach (GameObject piece in pieces)
         {
             Destroy(piece, 2.0f);

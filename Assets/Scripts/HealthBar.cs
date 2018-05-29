@@ -8,13 +8,15 @@ public class HealthBar : MonoBehaviour {
     Image healthBar;
     private float speed = 0.03f;
     private bool running;
- 
+    [SerializeField]
+    [Range(0.0f, 1.0f)]
+    private float startHp;
 
     void Start () {
 
         healthBar = GetComponent<Image>();
 
-        healthBar.fillAmount = 0.5f;
+        healthBar.fillAmount = startHp;
 
         running = false;
     }
@@ -28,10 +30,6 @@ public class HealthBar : MonoBehaviour {
             DecreasingHealth();
 
         }
-        
-       
-
-
 
     }
     private void DecreasingHealth()
@@ -47,18 +45,14 @@ public class HealthBar : MonoBehaviour {
 
         healthBar.fillAmount -= 0.05f;
     }
-    public void setRunning(bool running) {
+    public void SetRunning(bool running) {
         this.running = running;
     }
-    public float getHealth() {
+    public float GetHealth() {
         return healthBar.fillAmount;
     }
-    public void GameOver()
+    public void ResetHealth()
     {
-        if (healthBar.fillAmount == 0)
-        {
-
-        }
-
+        healthBar.fillAmount = startHp;
     }
 }

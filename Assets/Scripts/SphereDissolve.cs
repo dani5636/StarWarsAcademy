@@ -27,7 +27,7 @@ public class SphereDissolve : MonoBehaviour {
             {
                 dissolveSphereMaterial.SetFloat("_DissolveY", currentY);
                 dissolveArchMaterial.SetFloat("_DissolveY", currentY);
-                currentY += Time.deltaTime * speed;
+                currentY += Time.deltaTime * speed; 
             }
             else {
                 running = false;

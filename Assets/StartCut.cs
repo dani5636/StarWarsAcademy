@@ -8,10 +8,17 @@ public class StartCut : MonoBehaviour {
     GameManagerScript gameScript;
 	// Use this for initialization
 	void Start () {
-        gameScript = gameManager.GetComponent<GameManagerScript>();
 	}
-    public void OnHit() {
+    public void OnHit()
+    {
         gameScript.StartGame();
+        gameObject.GetComponent<MenuAnimControl>().shouldAnim = false;
+
+
+    
+    }
+    public void SetScript(GameManagerScript game) {
+        gameScript = game;
     }
 	
 	

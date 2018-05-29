@@ -9,5 +9,5 @@ EditorBuildSettings:
     path: Assets/Scenes/StoryScene.unity
     guid: cf537147b0c7d471294000af36e92fb1
   - enabled: 1
-    path: Assets/Scenes/Final Scene.unity
+    path: Assets/Scenes/FinalScene.unity
     guid: 480e7581831b90f47b2bce38910395a2

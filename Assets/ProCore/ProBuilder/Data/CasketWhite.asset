@@ -9,7 +9,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: -770389242, guid: 4df21bd079886d84699ca7be1316c7a7, type: 3}
-  m_Name: CasketYellow
+  m_Name: CasketWhite
   m_EditorClassIdentifier: 
   array:
   - {fileID: 2100000, guid: 78a19119cf05a48ec9a0b5e48142550e, type: 2}

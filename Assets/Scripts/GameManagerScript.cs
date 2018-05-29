@@ -7,6 +7,18 @@ public class GameManagerScript : MonoBehaviour {
     private bool gameStart;
     [SerializeField]
     private GameObject DangerSphere;
+    [SerializeField]
+    private GameObject StartGameObject;
+    [SerializeField]
+    private GameObject ResetSongObject;
+    [SerializeField]
+    private GameObject QuitToMenuObject;
+    [SerializeField]
+    private GameObject StartGamePosition;
+    [SerializeField]
+    private GameObject ResetSongPosition;
+    [SerializeField]
+    private GameObject QuitToMenuPosition;
 
     [SerializeField]
     private GameObject healthBar;
@@ -16,8 +28,10 @@ public class GameManagerScript : MonoBehaviour {
     // Use this for initialization
     void Start () {
         dissolve = DangerSphere.GetComponent<SphereDissolve>();
-
-	}
+        GameObject child = Instantiate(StartGameObject, new Vector3(0, 0, 0), Quaternion.identity);
+        child.transform.parent = StartGamePosition.transform;
+        child.GetComponent<StartCut>().SetScript(this);
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -26,9 +40,14 @@ public class GameManagerScript : MonoBehaviour {
                 GetComponent<NodeManager>().gameStart = true;
             }
         }
-        if (GetComponent<NodeManager>().GameOver()) {
-            GetComponent<NodeManager>().ResetGame();
+        if (GetComponent<NodeManager>().GameOver() && gameStart == true) {
+            
             dissolve.EndTriggerEffect();
+            gameStart = false;
+        }
+        else if (GetComponent<NodeManager>().GameOver() && !dissolve.running) {
+            EndGame();
+            Debug.Log("gameover");
         }
         if (Input.GetKeyDown(KeyCode.S)) {
             StartGame();
@@ -48,12 +67,28 @@ public class GameManagerScript : MonoBehaviour {
             }
         }
 	}
-    public void StartGame() {
+    public void StartGame()
+    {
         dissolve.StartTriggerEffect();
         gameStart = true;
+
+        GameObject[] menuItems = GameObject.FindGameObjectsWithTag("StartGame");
+        foreach (GameObject item in menuItems)
+        {
+            Destroy(item, 3.0f);
+        }
     }
     public void EndGame()
     {
-        gameStart = false;
+        GetComponent<NodeManager>().EndGame();
+        
+        GameObject child = Instantiate(ResetSongObject, new Vector3(0, 0, 0), Quaternion.identity);
+        child.transform.parent = ResetSongPosition.transform;
+        child.GetComponent<StartCut>().SetScript(this);
+       
+
+        GameObject childQuit = Instantiate(QuitToMenuObject, new Vector3(0, 0, 0), Quaternion.identity);
+        childQuit.transform.parent = QuitToMenuPosition.transform;
+
     }
 }
