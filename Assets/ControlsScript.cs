@@ -38,4 +38,5 @@ public class ControlsScript : MonoBehaviour {
     {
         get { return SteamVR_Controller.Input((int)trackedObj.index); }
     }
+ 
 }

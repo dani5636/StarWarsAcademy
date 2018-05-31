@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-[RequireComponent(typeof(TextMesh))]
+
 public class AniBlinkText : MonoBehaviour
 {
 

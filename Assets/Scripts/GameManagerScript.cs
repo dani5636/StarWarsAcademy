@@ -23,19 +23,20 @@ public class GameManagerScript : MonoBehaviour {
     private GameObject levelChanger;
     [SerializeField]
     private GameObject healthBar;
-
+    [SerializeField]
+    private GameObject LeaderBoard;
     private SphereDissolve dissolve;
+    private bool menuReady = false;
 
     // Use this for initialization
     void Start () {
-        dissolve = DangerSphere.GetComponent<SphereDissolve>();
-        GameObject child = Instantiate(StartGameObject, new Vector3(0, 0, 0), Quaternion.identity);
-        child.transform.parent = StartGamePosition.transform;
-        child.GetComponent<StartCut>().SetScript(this);
+        gameObject.GetComponent<HighscoreManager>()
+            .SetTextOfHighScoreBoard(gameObject.GetComponent<AudioSource>().clip.name);
+
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update () {
         if (gameStart) {
             if (!dissolve.running) {
                 GetComponent<NodeManager>().gameStart = true;
@@ -50,39 +51,39 @@ public class GameManagerScript : MonoBehaviour {
             EndGame();
             Debug.Log("gameover");
         }
-        if (Input.GetKeyDown(KeyCode.S)) {
-            StartGame();
-        }
-        if (Input.GetKeyDown(KeyCode.P)) {
-            if (Time.timeScale == 1)
-            {
-                
-                GetComponent<NodeManager>().TogglePause();
-                Time.timeScale = 0;
-            }
-            else {
-                GetComponent<NodeManager>().TogglePause();
-                
-                Time.timeScale = 1;
 
-            }
-        }
+       
 	}
+
+    public void ReadyMenu()
+    {
+        if (!menuReady) {
+            menuReady = true;
+        dissolve = DangerSphere.GetComponent<SphereDissolve>();
+        GameObject child = Instantiate(StartGameObject, new Vector3(0, 0, 0), Quaternion.identity);
+        child.transform.parent = StartGamePosition.transform;
+        child.GetComponent<StartCut>().SetScript(this);
+        }
+    }
     public void StartGame()
     {
         dissolve.StartTriggerEffect();
         gameStart = true;
+        LeaderBoard.SetActive(false);
 
         GameObject[] menuItems = GameObject.FindGameObjectsWithTag("StartGame");
         foreach (GameObject item in menuItems)
         {
-            Destroy(item, 3.0f);
+            Destroy(item, 1.5f);
         }
     }
     public void EndGame()
     {
         GetComponent<NodeManager>().EndGame();
-        
+        gameObject.GetComponent<HighscoreManager>()
+            .SetTextOfHighScoreBoard(gameObject.GetComponent<AudioSource>().clip.name);
+
+        LeaderBoard.SetActive(true);
         GameObject child = Instantiate(ResetSongObject, new Vector3(0, 0, 0), Quaternion.identity);
         child.transform.parent = ResetSongPosition.transform;
         child.GetComponent<StartCut>().SetScript(this);

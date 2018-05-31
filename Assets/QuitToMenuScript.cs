@@ -14,6 +14,7 @@ public class QuitToMenuScript : MonoBehaviour {
     }
     public void OnHit()
     {
+        VRControllerInput.SABER_SELECTED = false;
         levelChanger.GetComponent<LevelChanger>().ChangeLevel();   
     }
 	

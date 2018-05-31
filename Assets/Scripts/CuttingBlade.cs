@@ -10,10 +10,17 @@ public class CuttingBlade : MonoBehaviour {
     private Material capMaterial;
     [SerializeField]
     private float forceMultiplier = 10.0f;
+    [SerializeField]
+    private GameObject audioSwing;
     private bool isActive;
     private bool isCutting;
     private bool correctSlice = false;
     private Vector3 startCuttingPosition;
+    private Vector3 lastPosition;
+    private Vector3 lastUpperPosition;
+    private Vector3 lastMidPosition;
+    
+
     // Use this for initialization
     void Start() {
 
@@ -21,76 +28,121 @@ public class CuttingBlade : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
+        Vector3 currentPosition = transform.position;
+        Vector3 currentUpperLimit = transform.TransformPoint(transform.localPosition + (Vector3.up * transform.localScale.y));
+        Vector3 currentMidLimit = transform.TransformPoint(transform.localPosition + (Vector3.up * (transform.localScale.y / 2)));
+        if (lastPosition != null) {
+            GameObject cuttable = null;
+            float maxDistance = Vector3.Distance(lastPosition, currentPosition);
+            float maxDistanceUpper = Vector3.Distance(lastUpperPosition, currentUpperLimit);
+            float maxDistanceMid = Vector3.Distance(lastMidPosition, currentMidLimit);
+            RaycastHit hit;
+            Debug.DrawRay(lastPosition, currentPosition - lastPosition, Color.red, .5f);
+            Debug.DrawRay(lastUpperPosition, currentUpperLimit - lastUpperPosition, Color.red, .5f);
+            Debug.DrawRay(lastMidPosition, currentMidLimit - lastMidPosition, Color.red, .5f);
+            if (Physics.Raycast(lastPosition, currentPosition - lastPosition, out hit, maxDistance))
+            {
+                Debug.Log(""+ hit.collider.gameObject.name);
+                cuttable = hit.collider.gameObject;
+            }
+            else if (Physics.Raycast(lastUpperPosition, currentUpperLimit - lastUpperPosition, out hit, maxDistanceUpper))
+            {
+                cuttable = hit.collider.gameObject;
+            }
+            else if (Physics.Raycast(lastMidPosition, currentMidLimit - lastMidPosition, out hit, maxDistanceMid)) {
+                cuttable = hit.collider.gameObject;
+            }
+            if (cuttable != null)
+            {
+                CutEvent(cuttable, hit.collider, maxDistance, currentMidLimit, lastMidPosition, lastUpperPosition);
+            }
 
+
+
+        }
+        lastPosition = currentPosition;
+        lastMidPosition = currentMidLimit;
+        lastUpperPosition = currentUpperLimit;
     }
-    void OnTriggerEnter(Collider other) {
-        if (other.tag.Equals("Node") && isActive && other.gameObject.GetComponent<MoveNode>().hitable )
+
+
+    public void CutEvent(GameObject cuttable, Collider col, float force, Vector3 a, Vector3 b, Vector3 c)
+    {
+        if (!audioSwing.GetComponent<AudioSource>().isPlaying) {
+            audioSwing.GetComponent<AudioSource>().Play();
+        }
+        if (cuttable.tag.Equals("Node") && isActive && cuttable.GetComponent<MoveNode>().hitable)
         {
+            MoveNode script = cuttable.GetComponent<MoveNode>();
+            script.speed = 0;
+            if (col.GetType() == typeof(BoxCollider)) {
 
-            if (other.GetType() == typeof(BoxCollider))
+                script.OnHit(true);
+            }
+            else if (col.GetType() != typeof(BoxCollider))
             {
-                correctSlice = true;
-                rotateBlade(other.transform.position);
-                other.GetComponent<MoveNode>().speed = 0;
-                other.gameObject.GetComponent<MoveNode>().OnHit(true);
-                StartCoroutine("Cut", other.gameObject);
-
+                script.OnHit(false);
             }
-            else if(other.GetType() !=typeof(BoxCollider)){
-
-                other.GetComponent<MoveNode>().speed = 0;
-                rotateBlade(other.transform.position);
-                other.gameObject.GetComponent<MoveNode>().OnHit(false);
-                StartCoroutine("Cut", other.gameObject);
+            foreach (Collider coll in cuttable.GetComponents<Collider>()) {
+                coll.enabled = false;
             }
+
+            StartCoroutine(Cut(cuttable, force, a, b, c));
 
         }
-        else if(other.tag.Equals("StartGame")){
-            rotateBlade(other.transform.position);
-            other.gameObject.GetComponent<Animation>().Stop();
-            if(other.GetComponent<StartCut>() != null) { 
-            other.gameObject.GetComponent<StartCut>().OnHit();
-            }
-            if (other.GetComponent<QuitToMenuScript>() != null)
+        else if (cuttable.tag.Equals("StartGame")) {
+
+            cuttable.GetComponent<Animation>().Stop();
+            if (cuttable.GetComponent<StartCut>() != null)
             {
-                other.gameObject.GetComponent<QuitToMenuScript>().OnHit();
+                cuttable.GetComponent<StartCut>().OnHit();
             }
-            StartCoroutine("Cut", other.gameObject);
+            if (cuttable.GetComponent<QuitToMenuScript>() != null)
+            {
+                cuttable.GetComponent<QuitToMenuScript>().OnHit();
+            }
+            foreach (Collider coll in cuttable.GetComponents<Collider>())
+            {
+                coll.enabled = false;
+            }
+
+            StartCoroutine(Cut(cuttable, force,a,b,c));
+
         }
-    }
-    void OnTriggerExit(Collider other) {
-       
+        
 
     }
-    private IEnumerator Cut(GameObject node) {
 
 
+    void OnTriggerEnter(Collider col)
+    {
 
-        GameObject[] pieces = MeshCut.Cut(node, transform.position, transform.right, capMaterial);
+        Vector3 currentMidLimit = transform.TransformPoint(transform.localPosition + (Vector3.up * (transform.localScale.y / 2)));
+        float distance = Vector3.Distance(currentMidLimit, lastMidPosition);
+
+        CutEvent(col.gameObject, col, distance, currentMidLimit, lastMidPosition, lastUpperPosition);
+
+    }
+    private IEnumerator Cut(GameObject node, float force, Vector3 a, Vector3 b, Vector3 c) {
+
+        var side1 = b - a;
+        var side2 = c - a;
+        var normal = Vector3.Cross(side1, side2);
+        var turnToNormal = Quaternion.FromToRotation(Vector3.forward, Vector3.right);
+
+        GameObject[] pieces = MeshCut.Cut(node, transform.position,  normal, capMaterial);
 
         if (!pieces[1].GetComponent<Rigidbody>())
             pieces[1].AddComponent<Rigidbody>();
 
         pieces[0].GetComponent<Rigidbody>().isKinematic = false;
-        
-        if(pieces[0].gameObject.GetComponent<BoxCollider>() != null) { 
-        pieces[0].gameObject.GetComponent<BoxCollider>().enabled = false;
-        }
-        if (pieces[0].gameObject.GetComponent<MeshCollider>() != null)
-        {
-            pieces[0].gameObject.GetComponent<MeshCollider>().enabled = false;
-        }
-        if (pieces[0].gameObject.GetComponent<SphereCollider>() != null)
-        {
-            pieces[0].gameObject.GetComponent<SphereCollider>().enabled = false;
-        }
         var forceZero = pieces[0].transform.position - transform.position;
         forceZero = forceZero.normalized;
-        pieces[0].GetComponent<Rigidbody>().AddForce(forceZero * forceMultiplier);
+        pieces[0].GetComponent<Rigidbody>().AddForce(-normal.normalized * forceMultiplier * force);
 
         var forceOne = pieces[1].transform.position - transform.position;
         forceOne = forceZero.normalized;
-        pieces[1].GetComponent<Rigidbody>().AddForce(forceOne * forceMultiplier);
+        pieces[1].GetComponent<Rigidbody>().AddForce(normal.normalized.normalized * forceMultiplier*force);
         foreach (GameObject piece in pieces)
         {
             Destroy(piece, 2.0f);
@@ -101,14 +153,6 @@ public class CuttingBlade : MonoBehaviour {
     {
         isActive = active;
     }
-    private void rotateBlade(Vector3 startDirection) {
-        Vector3 pos = transform.position;
-            Vector3 dir = startDirection - pos;
-            Quaternion rotation = Quaternion.LookRotation(dir);
-            rotation.x = 0;
-            rotation.z = 0;
-            transform.localRotation = rotation;
-        
-    }
+  
 
 }

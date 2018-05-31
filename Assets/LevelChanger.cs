@@ -21,14 +21,17 @@ public class LevelChanger : MonoBehaviour {
 
     private void Start()
     {
-        audioSource = audioObject.GetComponent<AudioSource>();
+        if(audioObject.GetComponent<AudioSource>()!= null) {
+            audioSource = audioObject.GetComponent<AudioSource>();
+                }
     }
 
 
     // Update is called once per frame
     void Update () {
        
-        if(isFading){
+        if(isFading && audioSource != null){
+            
                 audioSource.volume = Mathf.MoveTowards(
                     audioSource.volume, 0, fadePerSec * Time.deltaTime);
             
@@ -38,7 +41,9 @@ public class LevelChanger : MonoBehaviour {
 
         FadeToNextLevel();
         isFading = true;
+        if( audioSource != null) { 
         fadePerSec = audioSource.volume / fadeOutTime;
+        }
     }
 
     private void FadeToNextLevel ()
@@ -54,7 +59,8 @@ public class LevelChanger : MonoBehaviour {
 
     private void OnFadeComplete ()
     {
-        SceneManager.LoadScene(levelToLoad);
+        Debug.Log("Screen plz");
+        SceneManager.LoadScene(levelToLoad,LoadSceneMode.Single);
 
     }
 

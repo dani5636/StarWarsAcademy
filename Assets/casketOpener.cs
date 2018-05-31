@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class casketOpener : MonoBehaviour {
-    
+public class CasketOpener : MonoBehaviour {
+
     private Vector3 originalScale;
 
     [SerializeField]
@@ -14,11 +14,16 @@ public class casketOpener : MonoBehaviour {
 
     private AudioSource musicSource;
 
+    [SerializeField]
+    private GameObject lightSaber;
     private float limitMinScale = 0.1f;
-    bool isScaling = false;
+    public bool isScaling = false;
 
+    public bool selectionDone;
     [SerializeField]
     private float moveSpeed = 0.3f;
+    GameObject destination;
+    bool hasStartedAudio = false;
 
 	// Use this for initialization
 	void Start () {
@@ -30,30 +35,32 @@ public class casketOpener : MonoBehaviour {
 	void Update ()
     {
         ScalingObject();
-        if (Input.GetKeyDown(KeyCode.DownArrow))
-        { 
-            isScaling = true;
-        }
+    
 
-        if (Input.GetKeyDown(KeyCode.UpArrow))
-        {
-            isScaling = false;
-        }
     }
+    public void SetDestination(GameObject destination) {
 
+        this.destination = destination;
+            }
     private void ScalingObject()
     {
 
 
         if (isScaling && transform.localScale.y >= limitMinScale)
         {
-            if (!musicSource.isPlaying)
+            if (!hasStartedAudio)
             {
                 musicSource.Play();
+                hasStartedAudio = true;
             }
             transform.localScale += new Vector3(0, -0.01f, 0);
-        } else if (isScaling)
+        } else if (isScaling ||  selectionDone)
         {
+            if (destination != null && !selectionDone) {
+
+                lightSaber.GetComponent<FlyToPlayerScript>().SetDestination(destination);
+                selectionDone = true;
+            }
             animholder.transform.Translate(Vector3.down * moveSpeed * Time.deltaTime);
         }
 

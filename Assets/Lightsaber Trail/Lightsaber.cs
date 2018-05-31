@@ -30,18 +30,15 @@ public class Lightsaber : MonoBehaviour {
     public AudioClip soundOn;
     public AudioClip soundOff;
     public AudioClip soundLoop;
-    public AudioClip soundSwing;
+
 
     public AudioSource AudioSource;
     public AudioSource AudioSourceLoop;
-    public AudioSource AudioSourceSwing;
+
 
     private bool isDeactivating = false;
 
-    // swinging
-    // TODO: make it depend on velocity of VR controller
-    private float swingSpeed = 0;
-    private Vector3 lastSwingPosition = Vector3.zero;
+
 
     /// <summary>
     /// Properties of a single blade.
@@ -52,8 +49,7 @@ public class Lightsaber : MonoBehaviour {
         // the blade itself
         public GameObject gameObject;
 
-        // the light attached to the blade
-        public Light light;
+
 
         // minimum blade length
         private float scaleMin;
@@ -75,14 +71,10 @@ public class Lightsaber : MonoBehaviour {
         {
             
             this.gameObject = gameObject;
-            this.light = gameObject.GetComponentInChildren<Light>();
+
             this.active = active;
-                 
-            // consistency check
-            if (light == null)
-            {
-                Debug.Log("No light found. Blade should have a light as child");
-            }
+            
+
 
             // remember initial scale values (non extending part of the blade)
             this.localScaleX = gameObject.transform.localScale.x;
@@ -120,24 +112,15 @@ public class Lightsaber : MonoBehaviour {
 
         public void SetColor( Color color)
         {
-            if (light != null)
-            {
-                light.color = color;
-            }
+
 
             // TODO: make fail-safe. accessing index 0 of materials and the fixed constant _MKGlowColor is risky
             gameObject.GetComponent<MeshRenderer>().materials[0].SetColor("_MKGlowColor", color);
 
         }
 
-        public void updateLight()
-        {
-            if (this.light == null)
-                return;
+   
 
-            // light intensity depending on blade size
-            this.light.intensity = this.scaleCurrent;
-        }
 
         public void updateSize()
         {
@@ -249,8 +232,6 @@ public class Lightsaber : MonoBehaviour {
         // only for testing dynamic colors, works.
         // UpdateColor();
 
-        // swing speed
-        updateSwingHandler();
 
 
     }
@@ -278,47 +259,8 @@ public class Lightsaber : MonoBehaviour {
 
     }
 
-    // calculate swing speed
-    private void updateSwingHandler()
-    {
-        // calculate speed
-        swingSpeed = (((transform.position - lastSwingPosition).magnitude) / Time.deltaTime);
+ 
 
-        // remember last position
-        lastSwingPosition = transform.position;
-
-        // swing sound
-        // TODO: a probably better solution would be to play the swing sound permanently and only fade the volume in and out depending on the swing speed
-        if (saberActive) // TODO: consider scale, i. e bladeScaleCurrent == bladeScaleMax)
-        {
-            // Debug.Log("Swing speed: " + swingSpeed);
-
-            // if certain swing speed is reached, play swing audio sound. if swinging stopped, fade the volume out
-            if (swingSpeed > 0.5) // TODO: just random swing values; needs to me more generic
-            {
-                if (!AudioSourceSwing.isPlaying)
-                {
-                    AudioSourceSwing.volume = 1f;
-                    AudioSourceSwing.PlayOneShot(soundSwing);
-                }
-            }
-            else
-            {
-
-                // fade out volume
-                if(AudioSourceSwing.isPlaying && AudioSourceSwing.volume > 0)
-                {
-                    AudioSourceSwing.volume *= 0.9f; // TODO: just random swing values; needs to me more generic
-                }
-                else
-                {
-                    AudioSourceSwing.volume = 0;
-                    AudioSourceSwing.Stop();
-                }
-
-            }
-        }
-    }
 
 
 
@@ -353,7 +295,7 @@ public class Lightsaber : MonoBehaviour {
         foreach (Blade blade in blades)
         {
 
-            blade.updateLight();
+
             blade.updateSize();
 
         }

@@ -8,6 +8,12 @@ TagManager:
   - KillNodes
   - Node
   - StartGame
+  - FxTemporaire
+  - CasketHolder
+  - LightSaber
+  - LeftLightsaber
+  - GameManager
+  - HoloChoice
   layers:
   - Default
   - TransparentFX
@@ -17,7 +23,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - Node
   - 
   - 
   - 
